@@ -1,0 +1,113 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    ext {
+        kotlin_version = '1.3.72'
+        def kotlinCoroutineVersion = '1.3.3'
+        def lifecycleVersion = '2.2.0'
+        def coroutineAdapterVersion = '0.9.2'
+        def retrofit_version = '2.7.2'
+
+        thirdPartyLibraries = [
+                //Kotlin
+                "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
+
+                //Coroutines
+                "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutineVersion",
+                "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutineVersion",
+
+                //AndroidX
+                'androidx.appcompat:appcompat:1.1.0',
+
+                //KotlinX
+                "androidx.core:core-ktx:1.2.0",
+
+                //KotlinX fragments for lazy viewModels
+                "androidx.fragment:fragment-ktx:1.2.2",
+
+                //Constraint layout
+                "androidx.constraintlayout:constraintlayout:1.1.3",
+
+                //Multidex
+                "androidx.multidex:multidex:2.0.1",
+
+                //lifecycle extensions LiveData ViewModel
+                "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion",
+                "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion",
+
+                //LiveEvent
+                "com.github.hadilq.liveevent:liveevent:1.2.0",
+
+                //Firebase
+                "com.google.firebase:firebase-core:17.2.3",
+                "com.google.firebase:firebase-auth:19.2.0",
+                "com.google.firebase:firebase-messaging:20.1.1",
+                "com.google.firebase:firebase-crashlytics:17.0.0-beta03",
+                "com.google.firebase:firebase-analytics:17.2.2",
+
+                //networking and serialization
+                "com.squareup.retrofit2:retrofit:$retrofit_version",
+                "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version",
+                "com.squareup.retrofit2:converter-gson:$retrofit_version",
+                "com.squareup.retrofit2:converter-scalars:$retrofit_version",
+                "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$coroutineAdapterVersion",
+
+                //Glide
+                "com.github.bumptech.glide:glide:4.11.0",
+
+                //Animation lottie
+                "com.airbnb.android:lottie:3.4.0",
+
+                "androidx.localbroadcastmanager:localbroadcastmanager:1.0.0",
+
+                //Material library
+                "com.google.android.material:material:1.2.0-alpha02",
+
+                //Places library
+                "com.google.android.libraries.places:places:2.2.0",
+
+                "androidx.legacy:legacy-support-v4:1.0.0",
+
+                'com.yandex.android:mapkit:3.3.1',
+
+                'com.yandex.android:directions:3.5.0',
+
+                'com.yandex.android:places:3.5.0',
+
+                'com.yandex.android:search:3.5.0'
+        ]
+
+        testDependencies = [
+                'junit:junit:4.13'
+        ]
+
+        androidTestsDependencies = [
+                'androidx.test:runner:1.2.0',
+                'androidx.test.espresso:espresso-core:3.2.0'
+        ]
+    }
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:4.0.0"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
