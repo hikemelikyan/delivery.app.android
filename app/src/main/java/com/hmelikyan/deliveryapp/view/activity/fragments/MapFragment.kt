@@ -11,9 +11,11 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -24,6 +26,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.hmelikyan.deliveryapp.DeliveryApp
 import com.hmelikyan.deliveryapp.R
@@ -44,6 +47,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, LocationListener {
     private lateinit var mActivity: MainActivity
     private val activityViewModel: MainViewModel by activityViewModels()
     private var mMap: GoogleMap? = null
+    private var latLngBounds: LatLngBounds? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -66,7 +70,14 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, LocationListener {
 
     override fun onMapReady(p0: GoogleMap?) {
         mMap = p0
+        mMap?.uiSettings?.isMyLocationButtonEnabled = true
         activityViewModel.orderDestinationsLiveData.observe(viewLifecycleOwner, Observer {
+            val builder = LatLngBounds.builder()
+            for (destination in it) {
+                builder.include(LatLng(destination.lat, destination.lng))
+            }
+            latLngBounds = builder.build()
+            mMap?.clear()
             for (address in it) {
                 val pinDrawable = when {
                     address.isActive -> BitmapDescriptorFactory.fromBitmap(ImageUtil.createBitmapFromDrawable(resources.getDrawable(R.drawable.map_pin_icon_delivering)))
@@ -86,7 +97,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, LocationListener {
     override fun onResume() {
         super.onResume()
         if (mMap != null) {
-            checkLocationSettings()
+            mMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, getDisplayWidth() / 3))
         } else {
             initMap()
         }
@@ -112,7 +123,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, LocationListener {
             .lastLocation
             .addOnSuccessListener {
                 if (it != null) {
-                    mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude, it.longitude), 14f))
+                    mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude, it.longitude), 13f))
                 } else {
                     mLocMan.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10f, this)
                     mLocMan.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 2000, 10f, this)
@@ -177,5 +188,12 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, LocationListener {
 
     override fun onProviderDisabled(provider: String?) {
         checkLocationSettings()
+    }
+
+    fun getDisplayWidth(): Int {
+        val displayMetrics = DisplayMetrics()
+        val windowManager = requireActivity().getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        return displayMetrics.widthPixels
     }
 }

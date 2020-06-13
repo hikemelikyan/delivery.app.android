@@ -3,4 +3,19 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+
+    <color name="card_background">#e1e4e4</color>
+    <color name="finished_card_background">#B253676D</color>
+
+    <color name="remaining_time_color">#79c685</color>
+    <color name="expiring_time_color">#d50000</color>
+
+    <color name="pending_order_number_color">#dedede</color>
+    <color name="active_order_number_color">#CEE90052</color>
+
+    <color name="order_actions_color">#4688f1</color>
+
+    <color name="tintGray">#959697</color>
+
+    <color name="page_background">#53676d</color>
 </resources>

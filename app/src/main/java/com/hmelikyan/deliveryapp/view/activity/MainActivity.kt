@@ -1,6 +1,7 @@
 package com.hmelikyan.deliveryapp.view.activity
 
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
@@ -26,10 +27,8 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val destinations = getDataFromJson()
         destinations[0].isActive = true
-        destinations[4].isFinished = true
         mViewModel.orderDestinationsLiveData.postValue(destinations)
 
         val fragmentsList = arrayListOf(
@@ -40,9 +39,14 @@ class MainActivity : BaseActivity() {
         val pagerAdapter = FragmentViewPagerAdapter(supportFragmentManager, fragmentsList)
         mBinding.fragmentPager.adapter = pagerAdapter
         mBinding.fragmentTabs.setupWithViewPager(mBinding.fragmentPager)
+
+        mViewModel.orderDestinationsLiveData.observe(this, Observer {
+            val tab = mBinding.fragmentTabs.getTabAt(0)
+            tab?.text = "${getString(R.string.stops_title)}(${it.size})"
+        })
     }
 
-    private fun getDataFromJson(): ArrayList<OrderDestinationModel> {
+    private fun getDataFromJson(): List<OrderDestinationModel> {
         var json: String? = null
         try {
             val inputStream: InputStream = assets.open("locations.json")
@@ -57,6 +61,6 @@ class MainActivity : BaseActivity() {
 
         val jElement = JsonParser().parse(json)
         val gson = Gson()
-        return gson.fromJson(jElement, object : TypeToken<ArrayList<OrderDestinationModel>>() {}.type)
+        return gson.fromJson(jElement, object : TypeToken<List<OrderDestinationModel>>() {}.type)
     }
 }
