@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DeliveryApp</string>
+    <string name="stops_title">Stops</string>
+    <string name="map_title">Map</string>
 </resources>
