@@ -70,6 +70,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, LocationListener {
 
     override fun onMapReady(p0: GoogleMap?) {
         mMap = p0
+        checkLocationSettings()
         mMap?.uiSettings?.isMyLocationButtonEnabled = true
         activityViewModel.orderDestinationsLiveData.observe(viewLifecycleOwner, Observer {
             val builder = LatLngBounds.builder()

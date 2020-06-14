@@ -42,7 +42,13 @@ class MainActivity : BaseActivity() {
 
         mViewModel.orderDestinationsLiveData.observe(this, Observer {
             val tab = mBinding.fragmentTabs.getTabAt(0)
-            tab?.text = "${getString(R.string.stops_title)}(${it.size})"
+            val finishedOrders = it.filter { order ->
+                order.isFinished
+            }
+            if (it.size != finishedOrders.size)
+                tab?.text = "${getString(R.string.stops_title)}(${it.size - finishedOrders.size})"
+            else
+                tab?.text = getString(R.string.stops_title)
         })
     }
 

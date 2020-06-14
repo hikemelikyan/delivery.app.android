@@ -5,7 +5,6 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import android.os.Bundle
 import androidx.fragment.app.Fragment
 
 open class BaseFragment : Fragment() {
@@ -17,10 +16,6 @@ open class BaseFragment : Fragment() {
         if (context is BaseActivity) {
             this.baseActivity = context
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
     }
 
     protected fun setLightStatusBar() {
